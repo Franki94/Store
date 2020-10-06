@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.4" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Store.Messaging\Store.Messaging.csproj" />
+    <ProjectReference Include="..\Store.Order.Application\Store.Order.Application.csproj" />
+    <ProjectReference Include="..\Store.Order.Models.Dto\Store.Order.Models.Dto.csproj" />
+    <ProjectReference Include="..\Store.Order.Repository.Sql\Store.Order.Repository.Sql.csproj" />
+    <ProjectReference Include="..\Store.Order.Repository\Store.Order.Repository.csproj" />
+  </ItemGroup>
+
+
+</Project>

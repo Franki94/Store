@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Store.Order.Models.Dto\Store.Order.Models.Dto.csproj" />
+    <ProjectReference Include="..\Store.Order.Repository\Store.Order.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
