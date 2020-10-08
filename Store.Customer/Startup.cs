@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Store.Customer.Repository.Sql;
 using Store.Messaging;
 
 namespace Store.Customer
@@ -27,6 +29,9 @@ namespace Store.Customer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<CustomersDbContext>(db => db.UseSqlServer(Configuration.GetConnectionString("CustomersDb")));
+
             services.AddRabbit();
         }
 

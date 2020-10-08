@@ -56,7 +56,10 @@ namespace Store.Order
 
             services.AddMassTransit(config =>
             {
-                config.UsingRabbitMq();
+                config.UsingRabbitMq((c, a) =>
+                {
+                    a.Host("rabbitmq://localhost");
+                });
             });
 
             services.AddMassTransitHostedService();
@@ -83,7 +86,7 @@ namespace Store.Order
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
