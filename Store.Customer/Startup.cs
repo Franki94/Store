@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Store.Customer.Application.Consumers;
+using Store.Customer.Application.Contracts;
+using Store.Customer.Repository;
 using Store.Customer.Repository.Sql;
 using Store.Messaging;
 
@@ -32,6 +29,14 @@ namespace Store.Customer
 
             services.AddDbContext<CustomersDbContext>(db => db.UseSqlServer(Configuration.GetConnectionString("CustomersDb")));
 
+            services.AddMediator(config =>
+            {
+                config.AddConsumer<SubmitCustomerConsumer>();
+                //config.AddMediator();
+                config.AddRequestClient<SubmitCustomer>();
+            });
+            services.AddTransient<ICustomersRepository, CustomersRepository>();
+            services.AddOpenApiDocument(config => config.PostProcess = d => d.Info.Title = "Customers APi");
             services.AddRabbit();
         }
 
@@ -44,7 +49,8 @@ namespace Store.Customer
             }
 
             app.UseHttpsRedirection();
-
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseRouting();
 
             app.UseAuthorization();

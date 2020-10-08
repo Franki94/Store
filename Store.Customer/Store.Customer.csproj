@@ -5,13 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.0.4" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.4" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="13.8.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Store.Customer.Application\Store.Customer.Application.csproj" />
+    <ProjectReference Include="..\Store.Customer.Models.Dto\Store.Customer.Models.Dto.csproj" />
     <ProjectReference Include="..\Store.Customer.Repository.Sql\Store.Customer.Repository.Sql.csproj" />
     <ProjectReference Include="..\Store.Messaging\Store.Messaging.csproj" />
   </ItemGroup>

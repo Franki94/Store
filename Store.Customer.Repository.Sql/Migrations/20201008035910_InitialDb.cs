@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Store.Customer.Repository.Sql.Migrations
 {
-    public partial class initialDb : Migration
+    public partial class InitialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,8 @@ namespace Store.Customer.Repository.Sql.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    customer_id = table.Column<int>(nullable: false),
+                    customer_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     first_name = table.Column<string>(maxLength: 30, nullable: true),
                     last_name = table.Column<string>(maxLength: 30, nullable: true),
                     address = table.Column<string>(maxLength: 30, nullable: true),

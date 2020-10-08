@@ -81,8 +81,10 @@ namespace Store.Customer.Repository.Sql.Migrations
             modelBuilder.Entity("Store.Customer.Models.Customers", b =>
                 {
                     b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("customer_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .HasColumnName("address")

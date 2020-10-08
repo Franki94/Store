@@ -10,8 +10,8 @@ using Store.Customer.Repository.Sql;
 namespace Store.Customer.Repository.Sql.Migrations
 {
     [DbContext(typeof(CustomersDbContext))]
-    [Migration("20201008013103_initialDb")]
-    partial class initialDb
+    [Migration("20201008035910_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,8 +83,10 @@ namespace Store.Customer.Repository.Sql.Migrations
             modelBuilder.Entity("Store.Customer.Models.Customers", b =>
                 {
                     b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("customer_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .HasColumnName("address")

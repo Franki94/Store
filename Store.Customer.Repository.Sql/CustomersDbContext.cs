@@ -9,13 +9,19 @@ namespace Store.Customer.Repository.Sql
         {
 
         }
+
+        public DbSet<Customers> Customers { get; set; }
+        public DbSet<Carts> Carts { get; set; }
+        public DbSet<CartItems> CartItems { get; set; }
+        public DbSet<Products> Products { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Models.Customers>(entity =>
             {
                 entity.HasKey(e => e.CustomerId).HasName("pk_customers");
 
-                entity.Property(e => e.CustomerId).HasColumnName("customer_id").ValueGeneratedNever();
+                entity.Property(e => e.CustomerId).HasColumnName("customer_id");
 
                 entity.Property(e => e.FirstName).HasColumnName("first_name").HasMaxLength(30);
 

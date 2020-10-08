@@ -63,6 +63,7 @@ namespace Store.Order
             });
 
             services.AddMassTransitHostedService();
+            services.AddOpenApiDocument(config => config.PostProcess = d => d.Info.Title = "Customers APi");
 
             //var assembly = Assembly.GetExecutingAssembly();
             //var types = assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(i => i.Name.EndsWith("Mapper")));
@@ -86,7 +87,8 @@ namespace Store.Order
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
