@@ -6,7 +6,7 @@ using Store.Customer.Models.Dto;
 using System.Threading.Tasks;
 
 namespace Store.Customer.Controllers
-{    
+{
     [Route("customers")]
     public class CustomersController : Controller
     {
@@ -21,9 +21,15 @@ namespace Store.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitCustomer([FromBody] CustomerRequest customerRequest)
         {
-            var response = await _submitCustomerClient.GetResponse<CustomerSubmitionAccepted>(customerRequest);
+            var (accepted, rejected) = await _submitCustomerClient.GetResponse<CustomerSubmitionAccepted, CustomerSubmitionRejected>(customerRequest);
 
-            return Ok(response.Message);
+            if (accepted.IsCompletedSuccessfully)
+            {
+                var response = await accepted;
+                return Ok(response);
+            }
+            var rejectedResponse = await rejected;
+            return BadRequest(rejectedResponse);
         }
     }
 }
