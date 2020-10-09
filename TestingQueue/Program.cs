@@ -1,11 +1,15 @@
 ﻿using MassTransit;
 using MassTransit.Definition;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Store.Customer.Application.Consumers;
+using Store.Customer.Repository;
+using Store.Customer.Repository.Sql;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -32,9 +36,11 @@ namespace TestingQueue
                 .ConfigureServices((hostedService, services) =>
                 {
                     services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+                    services.AddDbContext<CustomersDbContext>(db => db.UseSqlServer(hostedService.Configuration.GetConnectionString("CustomersDb")));
+                    services.AddTransient<ICustomersRepository, CustomersRepository>();
                     services.AddMassTransit(config =>
                     {
-                        config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();
+                        config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();                       
                         config.AddBus(ConfigureBus);
                     });
                     services.AddHostedService<MassTransitConsoleHostetService>();

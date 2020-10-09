@@ -1,15 +1,18 @@
 using MassTransit;
+using MassTransit.Definition;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Store.Customer.Application.Consumers;
 using Store.Customer.Application.Contracts;
 using Store.Customer.Repository;
 using Store.Customer.Repository.Sql;
 using Store.Messaging;
+using System;
 
 namespace Store.Customer
 {
@@ -25,19 +28,26 @@ namespace Store.Customer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddDbContext<CustomersDbContext>(db => db.UseSqlServer(Configuration.GetConnectionString("CustomersDb")));
+            services.AddTransient<ICustomersRepository, CustomersRepository>();
 
-            services.AddMediator(config =>
+            services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+            services.AddMassTransit(config =>
             {
-                config.AddConsumer<SubmitCustomerConsumer>();
+                //The consumer will not run here
+                //config.AddConsumer<SubmitCustomerConsumer>();
                 //config.AddMediator();
+                config.AddBus(registrationContext => Bus.Factory.CreateUsingRabbitMq());
                 config.AddRequestClient<SubmitCustomer>();
             });
-            services.AddTransient<ICustomersRepository, CustomersRepository>();
+
+            services.AddMassTransitHostedService();
+
+
             services.AddOpenApiDocument(config => config.PostProcess = d => d.Info.Title = "Customers APi");
-            services.AddRabbit();
+            //services.AddRabbit();
+            services.AddControllers();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

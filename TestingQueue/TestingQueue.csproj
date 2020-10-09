@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Store.Customer.Application\Store.Customer.Application.csproj" />
+    <ProjectReference Include="..\Store.Customer.Repository.Sql\Store.Customer.Repository.Sql.csproj" />
     <ProjectReference Include="..\Store.Messaging\Store.Messaging.csproj" />
   </ItemGroup>
 
