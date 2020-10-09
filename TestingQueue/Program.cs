@@ -1,40 +1,59 @@
-﻿using System;
+﻿using MassTransit;
+using MassTransit.Definition;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Store.Customer.Application.Consumers;
+using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace TestingQueue
 {
-    public class Message
-    {
-        public string Text { get; set; }
-    }
-    public class Person { }
-    public class School { }
-
-    public class Book { }
-
-    public interface IBookMapper
-    {
-        Book MapBookFrom(Person person, School school);
-    }
-
-    public class BookMapper : IBookMapper
-    {
-        public Book MapBookFrom(Person person, School school)
-        {
-            return new Book();
-        }
-    }
     public class Program
     {
 
-        public static async Task Main()
+        public static async Task Main(string[] args)
         {
-            
-            Console.ReadLine();
+            var isService = !(Debugger.IsAttached || args.Contains("--console"));
+
+            var builder = new HostBuilder()
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile("appsettings.json", true);
+                    config.AddEnvironmentVariables();
+
+                    //if (args != null)
+                    config.AddCommandLine(args);
+                })
+                .ConfigureServices((hostedService, services) =>
+                {
+                    services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+                    services.AddMassTransit(config =>
+                    {
+                        config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();
+                        config.AddBus(ConfigureBus);
+                    });
+                    services.AddHostedService<MassTransitConsoleHostetService>();
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("logging"));
+                    //logging.ConsoleLoggerExtensions();
+                    //logging.AddConsole();
+                    logging.AddConsole();
+                });
+
+            if (isService)
+                await builder.UseWindowsService().Build().RunAsync();
+            else
+                await builder.RunConsoleAsync();
+
             //var bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
+
             //{
             //    sbc.Host("rabbitmq://localhost");
 
@@ -56,6 +75,23 @@ namespace TestingQueue
             //await Task.Run(() => Console.ReadKey());
 
             //await bus.StopAsync();
+        }
+
+        public static IBusControl ConfigureBus(IBusRegistrationContext provider)
+        {
+            //Bus.Factory.CreateUsingRabbitMq(config =>
+            //{
+            //    config.Host("rabbitmq://localhost", "VirtualHost",
+            //        hostConfigurator =>
+            //        {
+            //            hostConfigurator.Username("guest");
+            //            hostConfigurator.Password("guest");
+            //        });
+            //});                
+            return Bus.Factory.CreateUsingRabbitMq(config =>
+            {
+                config.ConfigureEndpoints(provider);
+            });
         }
     }
 }
