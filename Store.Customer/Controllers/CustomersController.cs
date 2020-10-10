@@ -12,10 +12,13 @@ namespace Store.Customer.Controllers
     {
         readonly ILogger<CustomersController> _logger;
         readonly IRequestClient<SubmitCustomer> _submitCustomerClient;
-        public CustomersController(ILogger<CustomersController> logger, IRequestClient<SubmitCustomer> submitCustomerClient)
+        readonly ISendEndpointProvider _sendEndpointProvider;
+        public CustomersController(ILogger<CustomersController> logger, IRequestClient<SubmitCustomer> submitCustomerClient,
+            ISendEndpointProvider sendEndpointProvider)
         {
             _logger = logger;
             _submitCustomerClient = submitCustomerClient;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         [HttpPost]
@@ -30,6 +33,15 @@ namespace Store.Customer.Controllers
             }
             var rejectedResponse = await rejected;
             return BadRequest(rejectedResponse);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateSubmitCustomer([FromBody] CustomerRequest customerRequest)
+        {
+            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new System.Uri("exchange:submit-customer"));
+
+            await endpoint.Send<SubmitCustomer>(customerRequest);
+            return Ok();
         }
     }
 }

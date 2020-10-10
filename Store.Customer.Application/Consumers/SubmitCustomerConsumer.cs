@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Store.Customer.Application.Contracts;
-using Store.Customer.Repository;
 using Store.Customer.Models;
+using Store.Customer.Repository;
 using System.Threading.Tasks;
 
 namespace Store.Customer.Application.Consumers
@@ -19,12 +19,15 @@ namespace Store.Customer.Application.Consumers
 
             if (customer.FirstName.Contains("Lucas"))
             {
-                await context.RespondAsync<CustomerSubmitionRejected>(new { CustomerFirstName = "Lucas", Reason = "it's name is Lucas" });
+                if (context.RequestId != null)                
+                    await context.RespondAsync<CustomerSubmitionRejected>(new { CustomerFirstName = "Lucas", Reason = "it's name is Lucas" });
                 return;
             }
 
             await _customerRepository.Insert(customer);
-            await context.RespondAsync<CustomerSubmitionAccepted>(new {CustomerId = customer.CustomerId, CustomerFirstName = customer.FirstName });
+
+            if (context.RequestId != null)            
+                await context.RespondAsync<CustomerSubmitionAccepted>(new { CustomerId = customer.CustomerId, CustomerFirstName = customer.FirstName });
         }
     }
 }
