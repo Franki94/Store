@@ -1,14 +1,17 @@
 using AutoMapper;
 using MassTransit;
+using MassTransit.Definition;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Store.Messaging;
 using Store.Order.Application.Commands;
+using Store.Order.Application.Consumers;
 using Store.Order.Repository;
 using Store.Order.Repository.Sql;
 using System.Reflection;
@@ -45,25 +48,27 @@ namespace Store.Order
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<OrdersDbContext>(db => db.UseSqlServer(Configuration.GetConnectionString("OrdersDb")));
-            services.AddControllers();
-            services.AddRabbit();
             services.AddAutoMapper(Assembly.Load("Store.Order.Models.Dto"));
 
             services.AddTransient<IOrderRepository, OrderRepository>();
-
+            services.AddTransient<ICustomersRepository, CustomersRepository>();
             services.AddMediatR(typeof(CreateOrderHandler).Assembly);
 
-
-            services.AddMassTransit(config =>
+            services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+            services.AddMassTransit(busConfig =>
             {
-                config.UsingRabbitMq((c, a) =>
+                busConfig.AddBus(registrationContext => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
-                    a.Host("rabbitmq://localhost");
-                });
+                    config.ReceiveEndpoint("customer-created", e =>
+                    {
+                        e.Consumer<CustomerCreatedConsumer>(registrationContext);
+                    });
+                }));
+                busConfig.AddConsumer<CustomerCreatedConsumer>();
             });
-
+            
             services.AddMassTransitHostedService();
-            services.AddOpenApiDocument(config => config.PostProcess = d => d.Info.Title = "Customers APi");
+            services.AddOpenApiDocument(config => config.PostProcess = d => d.Info.Title = "Orders APi");
 
             //var assembly = Assembly.GetExecutingAssembly();
             //var types = assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(i => i.Name.EndsWith("Mapper")));
@@ -73,6 +78,7 @@ namespace Store.Order
             //    Type abstraction = type.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(i => i.Name.Contains(type.Name));
             //    services.AddSingleton(abstraction, type);
             //}
+            services.AddControllers();
 
         }
 

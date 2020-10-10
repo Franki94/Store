@@ -7,12 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Store.Customer.Application.Consumers;
-using Store.Customer.Application.Contracts;
+using Store.Contracts;
 using Store.Customer.Repository;
 using Store.Customer.Repository.Sql;
-using Store.Messaging;
-using System;
 
 namespace Store.Customer
 {

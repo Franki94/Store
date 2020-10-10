@@ -1,4 +1,4 @@
-﻿namespace Store.Customer.Application.Contracts
+﻿namespace Store.Contracts
 {
     public interface CustomerSubmitionAccepted
     {

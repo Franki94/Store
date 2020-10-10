@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Store.Contracts\Store.Contracts.csproj" />
     <ProjectReference Include="..\Store.Order.Models.Dto\Store.Order.Models.Dto.csproj" />
     <ProjectReference Include="..\Store.Order.Repository\Store.Order.Repository.csproj" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Store.Customer.Application.Contracts;
+using Store.Contracts;
 using Store.Customer.Models.Dto;
 using System.Threading.Tasks;
 

@@ -25,15 +25,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Order.Models.Dto", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Order.Application", "Store.Order.Application\Store.Order.Application.csproj", "{0BC73BE0-5ACE-4ADB-B3C3-E827DEE50724}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Customer.Application", "Store.Customer.Application\Store.Customer.Application.csproj", "{4D0CDB43-7821-45C5-81EA-D41B0C7DA319}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Customer.Application", "Store.Customer.Application\Store.Customer.Application.csproj", "{4D0CDB43-7821-45C5-81EA-D41B0C7DA319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Customer.Repository", "Store.Customer.Repository\Store.Customer.Repository.csproj", "{F04C571E-2CD1-4B84-A974-DF9DCD5C1784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Customer.Repository", "Store.Customer.Repository\Store.Customer.Repository.csproj", "{F04C571E-2CD1-4B84-A974-DF9DCD5C1784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Customer.Repository.Sql", "Store.Customer.Repository.Sql\Store.Customer.Repository.Sql.csproj", "{1584EC56-3742-4185-ACFA-FC44C58EAC9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Customer.Repository.Sql", "Store.Customer.Repository.Sql\Store.Customer.Repository.Sql.csproj", "{1584EC56-3742-4185-ACFA-FC44C58EAC9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Customer.Models", "Store.Customer.Models\Store.Customer.Models.csproj", "{442703D5-1F9C-4F06-BE75-3BE80A054FF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Customer.Models", "Store.Customer.Models\Store.Customer.Models.csproj", "{442703D5-1F9C-4F06-BE75-3BE80A054FF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Customer.Models.Dto", "Store.Customer.Models.Dto\Store.Customer.Models.Dto.csproj", "{E69F99AF-7C60-4979-8B37-CFF39326BF7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Customer.Models.Dto", "Store.Customer.Models.Dto\Store.Customer.Models.Dto.csproj", "{E69F99AF-7C60-4979-8B37-CFF39326BF7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Contracts", "Store.Contracts\Store.Contracts.csproj", "{8B77969D-5D13-415A-93A3-6BF18094D26B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{E69F99AF-7C60-4979-8B37-CFF39326BF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E69F99AF-7C60-4979-8B37-CFF39326BF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E69F99AF-7C60-4979-8B37-CFF39326BF7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B77969D-5D13-415A-93A3-6BF18094D26B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B77969D-5D13-415A-93A3-6BF18094D26B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B77969D-5D13-415A-93A3-6BF18094D26B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B77969D-5D13-415A-93A3-6BF18094D26B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using MassTransit.Definition;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -40,7 +39,7 @@ namespace TestingQueue
                     services.AddTransient<ICustomersRepository, CustomersRepository>();
                     services.AddMassTransit(config =>
                     {
-                        config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();                       
+                        config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();
                         config.AddBus(ConfigureBus);
                     });
                     services.AddHostedService<MassTransitConsoleHostetService>();

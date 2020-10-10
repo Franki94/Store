@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Store.Contracts\Store.Contracts.csproj" />
     <ProjectReference Include="..\Store.Customer.Application\Store.Customer.Application.csproj" />
     <ProjectReference Include="..\Store.Customer.Models.Dto\Store.Customer.Models.Dto.csproj" />
     <ProjectReference Include="..\Store.Customer.Repository.Sql\Store.Customer.Repository.Sql.csproj" />
