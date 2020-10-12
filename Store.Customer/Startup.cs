@@ -45,9 +45,8 @@ namespace Store.Customer
                     //{
                     //    configTopology.SetEntityName(flightOrdersTopic);
                     //});
-                    
                     busFactoryConfig.SelectBasicTier();
-                    busFactoryConfig.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
+                    busFactoryConfig.Host("connection");
                     //busFactoryConfig.Message<SubmitCustomer>(m => 
                     //{
                     //    m.SetEntityName("submit-customer");

@@ -11,29 +11,29 @@ namespace Store.Customer.Controllers
     public class CustomersController : Controller
     {
         readonly ILogger<CustomersController> _logger;
-        readonly IRequestClient<SubmitCustomer> _submitCustomerClient;
+        //readonly IRequestClient<SubmitCustomer> _submitCustomerClient;
         readonly ISendEndpointProvider _sendEndpointProvider;
-        public CustomersController(ILogger<CustomersController> logger, IRequestClient<SubmitCustomer> submitCustomerClient,
+        public CustomersController(ILogger<CustomersController> logger/*, IRequestClient<SubmitCustomer> submitCustomerClient*/,
             ISendEndpointProvider sendEndpointProvider)
         {
             _logger = logger;
-            _submitCustomerClient = submitCustomerClient;
+            //_submitCustomerClient = submitCustomerClient;
             _sendEndpointProvider = sendEndpointProvider;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitCustomer([FromBody] CustomerRequest customerRequest)
-        {
-            var (accepted, rejected) = await _submitCustomerClient.GetResponse<CustomerSubmitionAccepted, CustomerSubmitionRejected>(customerRequest);
+        //[HttpPost]
+        //public async Task<IActionResult> SubmitCustomer([FromBody] CustomerRequest customerRequest)
+        //{        
+        //    var (accepted, rejected) = await _submitCustomerClient.GetResponse<CustomerSubmitionAccepted, CustomerSubmitionRejected>(customerRequest);
 
-            if (accepted.IsCompletedSuccessfully)
-            {
-                var response = await accepted;
-                return Ok(response);
-            }
-            var rejectedResponse = await rejected;
-            return BadRequest(rejectedResponse);
-        }
+        //    if (accepted.IsCompletedSuccessfully)
+        //    {
+        //        var response = await accepted;
+        //        return Ok(response);
+        //    }
+        //    var rejectedResponse = await rejected;
+        //    return BadRequest(rejectedResponse);
+        //}
 
         [HttpPut]
         public async Task<IActionResult> UpdateSubmitCustomer([FromBody] CustomerRequest customerRequest)

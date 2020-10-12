@@ -77,16 +77,18 @@ namespace TestingQueue
 
             return Bus.Factory.CreateUsingAzureServiceBus(config =>
             {
-                config.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
+                config.Host("connection");
                 //config.ConfigureEndpoints(provider);
-
+                //Message is to specify a message in a specefic topic
                 //config.Message<SubmitCustomer>(m =>
-                //{
+                //{                   
                 //    m.SetEntityName("submit-customer");
                 //});
+                config.SelectBasicTier();
                 config.ReceiveEndpoint("submit-customer", e =>
                 {
                     e.Consumer<SubmitCustomerConsumer>(provider);
+                    e.ConfigureConsumeTopology = false;
                 });                
             });
         }
