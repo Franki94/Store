@@ -1,7 +1,9 @@
 using MassTransit;
 using MassTransit.Definition;
+using MassTransit.MultiBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +36,29 @@ namespace Store.Customer
                 //The consumer will not run here
                 //config.AddConsumer<SubmitCustomerConsumer>();
                 //config.AddMediator();
-                config.AddBus(registrationContext => Bus.Factory.CreateUsingRabbitMq());
-                config.AddRequestClient<SubmitCustomer>();
+                //config.AddBus(registrationContext => Bus.Factory.CreateUsingRabbitMq());
+
+                var azureServiceBus = Bus.Factory.CreateUsingAzureServiceBus(busFactoryConfig =>
+                {
+                    // specify the message FlightOrder to be sent to a specific topic
+                    //busFactoryConfig.Message<FlightOrder>(configTopology =>
+                    //{
+                    //    configTopology.SetEntityName(flightOrdersTopic);
+                    //});
+                    
+                    busFactoryConfig.SelectBasicTier();
+                    busFactoryConfig.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
+                    //busFactoryConfig.Message<SubmitCustomer>(m => 
+                    //{
+                    //    m.SetEntityName("submit-customer");
+                    //});
+                });
+                services.AddSingleton<IPublishEndpoint>(azureServiceBus);
+                services.AddSingleton<ISendEndpointProvider>(azureServiceBus);
+                services.AddSingleton<IBus>(azureServiceBus);
+                config.AddBus(registrationContext => azureServiceBus);            
+
+                config.AddRequestClient<SubmitCustomer>();                
             });
 
             services.AddMassTransitHostedService();

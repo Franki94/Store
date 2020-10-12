@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Store.Contracts;
 using Store.Customer.Application.Consumers;
 using Store.Customer.Repository;
 using Store.Customer.Repository.Sql;
@@ -29,8 +30,8 @@ namespace TestingQueue
                     config.AddJsonFile("appsettings.json", true);
                     config.AddEnvironmentVariables();
 
-                    //if (args != null)
-                    config.AddCommandLine(args);
+                    if (args != null)
+                        config.AddCommandLine(args);
                 })
                 .ConfigureServices((hostedService, services) =>
                 {
@@ -41,14 +42,14 @@ namespace TestingQueue
                     {
                         config.AddConsumersFromNamespaceContaining<SubmitCustomerConsumer>();
                         config.AddBus(ConfigureBus);
+                        config.AddConsumer<SubmitCustomerConsumer>();
+                        
                     });
-                    services.AddHostedService<MassTransitConsoleHostetService>();
+                    services.AddHostedService<MassTransitConsoleHostetService>();                    
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
-                    logging.AddConfiguration(hostingContext.Configuration.GetSection("logging"));
-                    //logging.ConsoleLoggerExtensions();
-                    //logging.AddConsole();
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("logging"));                
                     logging.AddConsole();
                 });
 
@@ -56,30 +57,6 @@ namespace TestingQueue
                 await builder.UseWindowsService().Build().RunAsync();
             else
                 await builder.RunConsoleAsync();
-
-            //var bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
-
-            //{
-            //    sbc.Host("rabbitmq://localhost");
-
-            //    sbc.ReceiveEndpoint("test_queue", ep =>
-            //    {                    
-            //        ep.Handler<Message>(context =>
-            //        {
-            //            return Console.Out.WriteLineAsync($"Received: {context.Message.Text}");
-            //        });
-            //    });
-            //});
-
-            //await bus.StartAsync(); // This is important!
-
-            //await bus.Publish(new Message { Text = "Hi" });
-            //await bus.Publish(new Message { Text = "Becker" });
-
-            //Console.WriteLine("Press any key to exit");
-            //await Task.Run(() => Console.ReadKey());
-
-            //await bus.StopAsync();
         }
 
         public static IBusControl ConfigureBus(IBusRegistrationContext provider)
@@ -93,9 +70,24 @@ namespace TestingQueue
             //            hostConfigurator.Password("guest");
             //        });
             //});                
-            return Bus.Factory.CreateUsingRabbitMq(config =>
+            //return Bus.Factory.CreateUsingRabbitMq(config =>
+            //{
+            //    config.ConfigureEndpoints(provider);
+            //});
+
+            return Bus.Factory.CreateUsingAzureServiceBus(config =>
             {
-                config.ConfigureEndpoints(provider);
+                config.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
+                //config.ConfigureEndpoints(provider);
+
+                //config.Message<SubmitCustomer>(m =>
+                //{
+                //    m.SetEntityName("submit-customer");
+                //});
+                config.ReceiveEndpoint("submit-customer", e =>
+                {
+                    e.Consumer<SubmitCustomerConsumer>(provider);
+                });                
             });
         }
     }

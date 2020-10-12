@@ -56,14 +56,16 @@ namespace Store.Order
 
             services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
             services.AddMassTransit(busConfig =>
-            {
-                busConfig.AddBus(registrationContext => Bus.Factory.CreateUsingRabbitMq(config =>
+            {                
+                busConfig.AddBus(registrationContext => Bus.Factory.CreateUsingAzureServiceBus(config =>
                 {
+                    config.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
                     config.ReceiveEndpoint("customer-created", e =>
                     {
                         e.Consumer<CustomerCreatedConsumer>(registrationContext);
-                    });
-                }));
+                        e.RemoveSubscriptions = true;
+                    });                    
+                }));                
                 busConfig.AddConsumer<CustomerCreatedConsumer>();
             });
             

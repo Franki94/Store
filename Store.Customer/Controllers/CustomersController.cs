@@ -38,7 +38,7 @@ namespace Store.Customer.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateSubmitCustomer([FromBody] CustomerRequest customerRequest)
         {
-            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new System.Uri("exchange:submit-customer"));
+            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new System.Uri("queue:submit-customer"));
 
             await endpoint.Send<SubmitCustomer>(customerRequest);
             return Ok();
