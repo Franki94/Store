@@ -77,7 +77,7 @@ namespace TestingQueue
 
             return Bus.Factory.CreateUsingAzureServiceBus(config =>
             {
-                config.Host("Endpoint=sb://notifications-dt.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZTw5lsXeSOCd4ZPreO0L/q/LbpVceqQ0aYgORV2DPqI=");
+                config.Host("connection");
                 //config.ConfigureEndpoints(provider);
 
                 //config.Message<SubmitCustomer>(m =>
