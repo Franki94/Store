@@ -42,15 +42,15 @@ namespace Store.Customer.Application.Consumers
             //    Phone = customer.Phone,
             //    CustomerId = customer.CustomerId
             //});
-            await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:customer-created"));
-            //await context.Publish<CustomerCreated>(new
-            //{
-            //    FirstName = customer.FirstName,
-            //    LastName = customer.LastName,
-            //    Address = customer.Address,
-            //    Phone = customer.Phone,
-            //    CustomerId = customer.CustomerId
-            //});
+            var endpoint = await  _sendEndpointProvider.GetSendEndpoint(new Uri("queue:customer-created"));
+            await endpoint.Send<CustomerCreated>(new
+            {
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Address = customer.Address,
+                Phone = customer.Phone,
+                CustomerId = customer.CustomerId
+            });
             //if (context.RequestId != null)
             //    await context.RespondAsync<CustomerSubmitionAccepted>(new { CustomerId = customer.CustomerId, CustomerFirstName = customer.FirstName });
         }
